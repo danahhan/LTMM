@@ -3,7 +3,6 @@ import { extension_settings, getContext } from '../../extensions.js';
 import { SlashCommandParser } from '../../slash-commands/SlashCommandParser.js';
 import { SlashCommand } from '../../slash-commands/SlashCommand.js';
 import { ARGUMENT_TYPE, SlashCommandArgument } from '../../slash-commands/SlashCommandArgument.js';
-import { loadWorldInfo, saveWorldInfo, createWorldInfoEntry } from '../../world-info.js';
 
 const MODULE_NAME = 'ltm-extractor';
 
@@ -56,39 +55,83 @@ function parseLTMFormat(text) {
  */
 async function addLTMToWorldInfo(ltmData, worldInfoName) {
     try {
-        // 월드인포 파일 로드
-        const data = await loadWorldInfo(worldInfoName);
+        // API를 통해 월드인포 파일 로드
+        const response = await fetch('/api/worldinfo/get', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: worldInfoName }),
+        });
 
-        if (!data || !('entries' in data)) {
-            toastr.error(`World Info file "${worldInfoName}" not found or invalid`);
+        if (!response.ok) {
+            toastr.error(`World Info file "${worldInfoName}" not found`);
             return false;
         }
 
-        // 새 항목 생성
-        const entry = createWorldInfoEntry(worldInfoName, data);
+        const data = await response.json();
+
+        if (!data || !data.entries) {
+            toastr.error(`World Info file "${worldInfoName}" has invalid format`);
+            return false;
+        }
+
+        // 새 UID 생성
+        const existingUIDs = Object.keys(data.entries).map(uid => parseInt(uid));
+        const newUID = existingUIDs.length > 0 ? Math.max(...existingUIDs) + 1 : 0;
 
         // 키워드 설정: Main Keyword + Trigger Keywords
         const allKeywords = [ltmData.mainKeyword, ...ltmData.triggerKeywords];
-        entry.key = allKeywords;
 
-        // Comment에 Main Keyword 설정
-        entry.comment = ltmData.mainKeyword;
+        // 새 항목 생성
+        const newEntry = {
+            uid: newUID,
+            key: allKeywords,
+            keysecondary: [],
+            comment: ltmData.mainKeyword,
+            content: ltmData.fullContent,
+            constant: (ltmData.variable1 === 1),
+            selective: false,
+            order: ltmData.variable2,
+            position: 0,
+            disable: false,
+            addMemo: true,
+            excludeRecursion: false,
+            delayUntilRecursion: false,
+            displayIndex: newUID,
+            probability: 100,
+            useProbability: false,
+            depth: 4,
+            selectiveLogic: 0,
+            group: '',
+            scanDepth: null,
+            caseSensitive: false,
+            matchWholeWords: false,
+            useGroupScoring: false,
+            automationId: '',
+            role: 0,
+            vectorized: false,
+            sticky: null,
+            cooldown: null,
+            delay: null
+        };
 
-        // Content 설정
-        entry.content = ltmData.fullContent;
-
-        // Constant 설정 (변수1: 1=true, 2=false)
-        entry.constant = (ltmData.variable1 === 1);
-
-        // Order 설정 (변수2)
-        entry.order = ltmData.variable2;
-
-        // 기본 설정
-        entry.enabled = true;
-        entry.addMemo = true;
+        // 항목 추가
+        data.entries[newUID] = newEntry;
 
         // 월드인포 저장
-        await saveWorldInfo(worldInfoName, data);
+        const saveResponse = await fetch('/api/worldinfo/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: worldInfoName, data: data }),
+        });
+
+        if (!saveResponse.ok) {
+            toastr.error('Failed to save World Info');
+            return false;
+        }
 
         return true;
     } catch (error) {
@@ -123,18 +166,16 @@ async function ltmCommandCallback(args, value) {
     }
 
     // 연결된 월드인포 가져오기
-    const characterWorldInfo = context.world_info;
-    const chatWorldInfo = chat.world_info;
-
+    const character = context.characters[context.characterId];
     let targetWorldInfo = null;
 
     // 채팅 전용 월드인포 확인
-    if (chatWorldInfo) {
-        targetWorldInfo = chatWorldInfo;
+    if (chat.world_info) {
+        targetWorldInfo = chat.world_info;
     }
     // 캐릭터 월드인포 확인
-    else if (characterWorldInfo) {
-        targetWorldInfo = characterWorldInfo;
+    else if (character && character.data && character.data.character_book) {
+        targetWorldInfo = character.data.character_book.name;
     }
     else {
         toastr.error('No World Info connected to this chat or character');
@@ -192,7 +233,11 @@ function registerSlashCommands() {
 
 // 확장프로그램 초기화
 jQuery(async () => {
-    loadSettings();
-    registerSlashCommands();
-    console.log('LTM Extractor extension loaded');
+    try {
+        loadSettings();
+        registerSlashCommands();
+        console.log('LTM Extractor extension loaded successfully');
+    } catch (error) {
+        console.error('LTM Extractor failed to load:', error);
+    }
 });
