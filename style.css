@@ -1,0 +1,17 @@
+/* LTM Extractor 확장프로그램 스타일 */
+.ltm-extractor-container {
+    padding: 10px;
+}
+
+.ltm-status {
+    color: var(--SmartThemeBodyColor);
+    font-size: 0.9em;
+}
+
+.ltm-success {
+    color: #28a745;
+}
+
+.ltm-error {
+    color: #dc3545;
+}
