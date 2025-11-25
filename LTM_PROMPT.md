@@ -1,9 +1,12 @@
 # LTM Prompt Template
 
-This is the updated LTM (Long-Term Memory) prompt that users can use with their AI systems.
+This file contains the complete LTM (Long-Term Memory) prompt that you can copy and paste into your AI system.
 
-## Prompt
+---
 
+## Complete Prompt (Copy Below)
+
+```
 System: Pause the story. Generate LTM primarily based on recent events and ongoing conversations.
 
 #LTM = Long-Term Memory
@@ -22,23 +25,23 @@ Use exactly this format, including backticks:
 
 ### Creating LTM
 
-1. **Main Keyword:** Choose direct experiences, memories, places, people, etc.
+1. Main Keyword: Choose direct experiences, memories, places, people, etc.
 
-2. **Description:** Summarize situation, emotions, sensory details in 2-3 sentences.
+2. Description: Summarize situation, emotions, sensory details in 2-3 sentences.
 
-3. **Timestamp:** Record main NPCs' age and season in format (Timestamp: Age, mm.dd).
+3. Timestamp: Record main NPCs' age and season in format (Timestamp: Age, mm.dd).
 
-4. **Trigger Keywords:** Select 2 keywords to activate LTM in future conversations. Place them between | symbols.
+4. Trigger Keywords: Select 2 keywords to activate LTM in future conversations. Place them between | symbols.
 
-5. **Importance Level:** Use A or B:
-   - **A:** Essential LTM for story progression, character relationships, or character growth. Use sparingly - only for truly important memories.
-   - **B:** Other LTMs that are valuable but not critical for story continuity.
+5. Importance Level: Use A or B:
+   - A: Essential LTM for story progression, character relationships, or character growth. Use sparingly - only for truly important memories.
+   - B: Other LTMs that are valuable but not critical for story continuity.
 
-6. **Character Name:** The name of the story's main character who owns this LTM.
+6. Character Name: The name of the story's main character who owns this LTM.
 
-7. **Character Number:** A unique identifier number assigned to the character.
+7. Character Number: A unique identifier number assigned to the character.
 
-8. **When to Create:** After important events, emotional/relationship changes, decisions, or meeting key people.
+8. When to Create: After important events, emotional/relationship changes, decisions, or meeting key people.
 
 ### Example
 
@@ -54,4 +57,19 @@ Use exactly this format, including backticks:
 
 - Interpret flexibly for natural character growth.
 
-- **Use "A" importance sparingly** - reserve it for memories that are truly essential for the story's progression, character relationships, or character development. Most LTMs should use "B".
+- Use "A" importance sparingly - reserve it for memories that are truly essential for the story's progression, character relationships, or character development. Most LTMs should use "B".
+```
+
+---
+
+## Field Explanations
+
+| Field | Description |
+|-------|-------------|
+| Main Keyword | Direct experiences, memories, places, people, etc. |
+| Description | 2-3 sentences summarizing situation, emotions, sensory details |
+| Timestamp | Format: (Timestamp: Age, mm.dd) |
+| Trigger Keywords | 2 keywords between \| symbols to activate LTM |
+| Importance | A = essential for story/relationship/growth, B = other valuable memories |
+| Character Name | Name of the character who owns this LTM |
+| Character Number | Unique identifier number for the character |
