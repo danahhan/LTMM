@@ -4,12 +4,13 @@ class LTMCharacterManagerUI {
     constructor() {
         this.characters = [];
         this.defaultCharacter = { name: '{{char}}', order: 1 };
+        this.nextId = 1; // Unique ID counter for characters
         this.init();
     }
 
     init() {
         // Add default character on initialization
-        this.characters.push({ ...this.defaultCharacter, isDefault: true });
+        this.characters.push({ ...this.defaultCharacter, id: this.nextId++, isDefault: true });
         
         this.renderCharacterList();
         this.updatePromptPreview();
@@ -21,22 +22,33 @@ class LTMCharacterManagerUI {
         }
     }
 
+    // Find character index by ID
+    findCharacterIndexById(id) {
+        return this.characters.findIndex(c => c.id === id);
+    }
+
+    // Find character by ID
+    findCharacterById(id) {
+        return this.characters.find(c => c.id === id);
+    }
+
     renderCharacterList() {
         const container = document.getElementById('character-list');
         if (!container) return;
 
         container.innerHTML = '';
 
-        this.characters.forEach((character, index) => {
-            const entry = this.createCharacterEntry(character, index);
+        this.characters.forEach((character) => {
+            const entry = this.createCharacterEntry(character);
             container.appendChild(entry);
         });
     }
 
-    createCharacterEntry(character, index) {
+    createCharacterEntry(character) {
+        const characterId = character.id;
         const entry = document.createElement('div');
         entry.className = 'character-entry';
-        entry.dataset.index = index;
+        entry.dataset.id = characterId;
 
         const nameLabel = document.createElement('label');
         nameLabel.textContent = '이름:';
@@ -46,7 +58,7 @@ class LTMCharacterManagerUI {
         nameInput.value = character.name;
         nameInput.placeholder = '캐릭터 이름';
         nameInput.dataset.field = 'name';
-        nameInput.dataset.index = index;
+        nameInput.dataset.id = characterId;
 
         const orderLabel = document.createElement('label');
         orderLabel.textContent = 'Order:';
@@ -56,25 +68,31 @@ class LTMCharacterManagerUI {
         orderInput.value = character.order;
         orderInput.min = 1;
         orderInput.dataset.field = 'order';
-        orderInput.dataset.index = index;
+        orderInput.dataset.id = characterId;
 
         const syncBtn = document.createElement('button');
         syncBtn.className = 'btn btn-sync';
         syncBtn.textContent = 'Sync';
-        syncBtn.addEventListener('click', () => this.syncCharacter(index));
+        syncBtn.addEventListener('click', () => this.syncCharacterById(characterId));
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'btn btn-delete';
         deleteBtn.textContent = '삭제';
-        deleteBtn.addEventListener('click', () => this.deleteCharacter(index));
+        deleteBtn.addEventListener('click', () => this.deleteCharacterById(characterId));
 
-        // Add input event listeners for real-time updates
+        // Add input event listeners for real-time updates using ID lookup
         nameInput.addEventListener('input', (e) => {
-            this.characters[index].name = e.target.value;
+            const char = this.findCharacterById(characterId);
+            if (char) {
+                char.name = e.target.value;
+            }
         });
 
         orderInput.addEventListener('input', (e) => {
-            this.characters[index].order = parseInt(e.target.value, 10) || 1;
+            const char = this.findCharacterById(characterId);
+            if (char) {
+                char.order = parseInt(e.target.value, 10) || 1;
+            }
         });
 
         entry.appendChild(nameLabel);
@@ -101,6 +119,7 @@ class LTMCharacterManagerUI {
             : 1;
         
         this.characters.push({
+            id: this.nextId++,
             name: '',
             order: newOrder,
             isDefault: false
@@ -109,20 +128,23 @@ class LTMCharacterManagerUI {
         this.renderCharacterList();
     }
 
-    deleteCharacter(index) {
+    deleteCharacterById(id) {
         // Prevent deletion of the last character (keep at least one)
         if (this.characters.length <= 1) {
             alert('최소 하나의 캐릭터가 필요합니다.');
             return;
         }
 
-        this.characters.splice(index, 1);
-        this.renderCharacterList();
-        this.updatePromptPreview();
+        const index = this.findCharacterIndexById(id);
+        if (index !== -1) {
+            this.characters.splice(index, 1);
+            this.renderCharacterList();
+            this.updatePromptPreview();
+        }
     }
 
-    syncCharacter(index) {
-        const character = this.characters[index];
+    syncCharacterById(id) {
+        const character = this.findCharacterById(id);
         if (!character) return;
 
         // Update the prompt preview
@@ -139,7 +161,7 @@ class LTMCharacterManagerUI {
         document.dispatchEvent(event);
 
         // Visual feedback
-        const entry = document.querySelector(`.character-entry[data-index="${index}"]`);
+        const entry = document.querySelector(`.character-entry[data-id="${id}"]`);
         if (entry) {
             entry.style.borderColor = '#4CAF50';
             setTimeout(() => {
@@ -192,13 +214,14 @@ class LTMCharacterManagerUI {
     setCharacters(characters) {
         if (Array.isArray(characters) && characters.length > 0) {
             this.characters = characters.map((c, index) => ({
+                id: this.nextId++,
                 name: c.name || '{{char}}',
                 order: c.order || index + 1,
                 isDefault: index === 0 && c.name === '{{char}}' && c.order === 1
             }));
         } else {
             // Reset to default
-            this.characters = [{ ...this.defaultCharacter, isDefault: true }];
+            this.characters = [{ ...this.defaultCharacter, id: this.nextId++, isDefault: true }];
         }
         this.renderCharacterList();
         this.updatePromptPreview();
@@ -206,7 +229,7 @@ class LTMCharacterManagerUI {
 
     // Reset to default state
     reset() {
-        this.characters = [{ ...this.defaultCharacter, isDefault: true }];
+        this.characters = [{ ...this.defaultCharacter, id: this.nextId++, isDefault: true }];
         this.renderCharacterList();
         this.updatePromptPreview();
     }
