@@ -8,6 +8,12 @@ This extension adds functionality for processing `/LTM-commands` in SillyTavern 
 
 - Parse `/LTM-commands` in the format:  
   `LTM - $1: $2 |$3|$4|$5|$6`
+  - `$1`: Main Keyword (e.g., "First Kiss")
+  - `$2`: Description with timestamp (e.g., "Alex's first kiss with {{user}}... (Timestamp: 18 years old, 4.15)")
+  - `$3`: Trigger Keywords (e.g., "Rainy Day, School")
+  - `$4`: Importance Level (`A` = essential for story/relationship/character growth, `B` = other LTMs)
+  - `$5`: Character Name (e.g., "Alex")
+  - `$6`: Character Number (e.g., "16")
 - Dynamically update World Info with:
   - **Key:** `$1, $3`
   - **Comment:** `$1`
@@ -43,6 +49,13 @@ This extension adds functionality for processing `/LTM-commands` in SillyTavern 
    /LTM-명령어
    LTM - $1: $2 |$3|$4|$5|$6
    ```
+   
+   **Example:**
+   ```
+   LTM - First Kiss: Alex's first kiss with {{user}} at school on a rainy day tasted of Alex's tears. {{user}} hugged them tightly, calling them cute. Though not Alex's first ever kiss, this one felt uniquely special and precious, mixing joy with a hint of melancholy. (Timestamp: 18 years old, 4.15) |Rainy Day, School|A|Alex|16
+   ```
+   
+   For the complete prompt template to use with your AI, see [LTM_PROMPT.md](LTM_PROMPT.md).
 
 2. **Set Position:**
    ```javascript
