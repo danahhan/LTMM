@@ -1,0 +1,130 @@
+/* LTM Character Manager Styles */
+.ltm-container {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.ltm-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.character-list {
+    margin-bottom: 20px;
+}
+
+.character-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    border: 1px solid #444;
+}
+
+.character-entry input[type="text"],
+.character-entry input[type="number"] {
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+}
+
+.character-entry input[type="text"] {
+    flex: 1;
+    min-width: 150px;
+}
+
+.character-entry input[type="number"] {
+    width: 80px;
+}
+
+.character-entry label {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-sync {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-sync:hover {
+    background-color: #45a049;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #da190b;
+}
+
+.btn-add {
+    background-color: #2196F3;
+    color: white;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+}
+
+.btn-add:hover {
+    background-color: #1976D2;
+}
+
+.add-character-section {
+    margin-bottom: 20px;
+}
+
+.prompt-preview {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #444;
+}
+
+.prompt-preview h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.prompt-preview pre {
+    background-color: #1a1a1a;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #0f0;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+}
+
+.default-indicator {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+    margin-left: 10px;
+}
