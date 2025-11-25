@@ -1,0 +1,8 @@
+{
+  "name": "ltm-command-extension",
+  "version": "1.0.0",
+  "description": "A SillyTavern extension for processing /LTM-commands and updating world info dynamically.",
+  "main": "src/main.js",
+  "author": "danahhan",
+  "license": "MIT"
+}
