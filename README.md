@@ -1,65 +1,103 @@
-# LTM Command Extension for SillyTavern
+# LTM Manager - SillyTavern Extension
 
 ## Description
 
-This extension adds functionality for processing `/LTM-commands` in SillyTavern and dynamically updating world info. It includes options to customize the position of the updates and store character-specific prompts.
+LTM Manager is a SillyTavern extension for processing `/LTM-명령어` commands and dynamically managing world info entries. It provides an intuitive UI for creating world info entries and managing character-specific prompts.
 
 ## Features
 
-- Parse `/LTM-commands` in the format:  
+### LTM Command Processing
+- Parse `/LTM-명령어` commands in the format:  
   `LTM - $1: $2 |$3|$4|$5|$6`
-- Dynamically update World Info with:
-  - **Key:** `$1, $3`
+- Automatically create World Info entries with the following mapping:
+  - **KeySecondary:** `$1, $3`
   - **Comment:** `$1`
   - **Content:** `LTM - $1: $2`
-  - **Constant:** Set based on `$4` (`A = true`, otherwise `false`).
-  - **KeySecondary:** `$5`
-  - **Order:** `$6`
-- Customize position with options:
-  - `0`: "before C"
-  - `1`: "after C"
-- Save and retrieve character-specific prompts.
+  - **Constant:** `$4` (`A` = true, `2` = false)
+  - **Key:** `$5`
+  - **Order:** `$6` (number)
+
+### Position Settings
+- Customize entry position with options:
+  - `0`: Before Character definition
+  - `1`: After Character definition
+
+### Character Prompts Management
+- Save and retrieve character-specific prompts
+- Edit and delete saved prompts through the UI
+- Persistent storage of prompts across sessions
+
+### Quick World Info Entry
+- Manual entry form for creating world info entries
+- All fields configurable through the UI
 
 ## Installation
 
-1. Clone the repository:
+1. Clone the repository into your SillyTavern extensions folder:
    ```bash
-   git clone https://github.com/[your-username]/ltm-command-extension.git
+   cd SillyTavern/public/scripts/extensions/third_party/
+   git clone https://github.com/danahhan/LTMM.git
    ```
 
-2. Install dependencies (if any):
-   ```bash
-   npm install
-   ```
-
-3. Add the extension to SillyTavern:
-   - Copy the folder into SillyTavern's extensions directory.
-   - Restart SillyTavern and enable the extension from the settings.
+2. Restart SillyTavern and enable the extension from Settings → Extensions.
 
 ## Usage
 
-1. **LTM Command Format:**
-   ```
-   /LTM-명령어
-   LTM - $1: $2 |$3|$4|$5|$6
-   ```
+### Using LTM Command
+```
+/LTM-명령어
+LTM - Memory: This is the content |secondary|A|mainkey|100
+```
 
-2. **Set Position:**
-   ```javascript
-   extension.setPosition(0); // Set position to "before C"
-   extension.setPosition(1); // Set position to "after C"
-   ```
+This will create a world info entry with:
+- KeySecondary: `["Memory", "secondary"]`
+- Comment: `Memory`
+- Content: `LTM - Memory: This is the content`
+- Constant: `true` (because $4 is 'A')
+- Key: `mainkey`
+- Order: `100`
 
-3. **Save Character Prompt:**
-   ```javascript
-   extension.saveCharacterPrompt("Alice", "This is Alice's prompt.");
-   ```
+### UI Features
+1. **Position Settings**: Select where world info entries should be positioned
+2. **LTM Command Processor**: Enter LTM data directly and process it
+3. **Character Prompts**: Save, edit, and manage character-specific prompts
+4. **Quick World Info Entry**: Manually create world info entries with all fields
 
-4. **Retrieve Character Prompt:**
-   ```javascript
-   const prompt = extension.getCharacterPrompt("Alice");
-   console.log(prompt);
-   ```
+### API Usage (for developers)
+```javascript
+// Import the extension
+const ltm = require('./main');
+
+// Process an LTM command
+const result = ltm.processLTMCommand("LTM - Test: Content |tag|A|key|50");
+
+// Set position
+ltm.setPosition(0); // Before character
+ltm.setPosition(1); // After character
+
+// Manage character prompts
+ltm.saveCharacterPrompt("Alice", "This is Alice's system prompt.");
+const prompt = ltm.getCharacterPrompt("Alice");
+ltm.deleteCharacterPrompt("Alice");
+```
+
+## File Structure
+
+```
+LTMM/
+├── index.js        # SillyTavern extension entry point
+├── main.js         # Core LTM command processing logic
+├── config.js       # Configuration settings
+├── settings.html   # UI template with embedded styles
+├── manifest.json   # Extension manifest
+├── package.json    # NPM package info
+└── README.md       # Documentation
+```
+
+## References
+
+- UI design inspired by [character-assets](https://github.com/tincansimagine/character-assets)
+- World info management based on [theghostface](https://github.com/HealthyControl/theghostface)
 
 ## License
 
