@@ -50,7 +50,7 @@ Use exactly this format, including backticks:
 
 - One LTM per significant event.
 
-- Importance varies by main NPCs's background.
+- Importance varies by main NPC's background.
 
 - Interpret flexibly for natural character growth.
 
