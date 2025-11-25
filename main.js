@@ -9,7 +9,7 @@ class LTMCommandExtension {
 
     // Process /LTM-Command
     processLTMCommand(msg) {
-        const regex = /LTM - (\S*): ([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)/m;
+        const regex = /LTM - ([^:]+): ([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)/m;
         const match = regex.exec(msg);
 
         if (!match) return console.error("Invalid LTM message format.");
