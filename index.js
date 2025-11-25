@@ -2,6 +2,9 @@
 import { extension_settings, getContext, loadExtensionSettings, saveSettingsDebounced } from "../../../extensions.js";
 import { saveWorldInfo, world_info } from "../../../worldinfo.js";
 import { eventSource, event_types } from "../../../../script.js";
+import { SlashCommand } from "../../../slash-commands/SlashCommand.js";
+import { SlashCommandParser } from "../../../slash-commands/SlashCommandParser.js";
+import { SlashCommandArgument } from "../../../slash-commands/SlashCommandArgument.js";
 
 const extensionName = "LTMM";
 const extensionFolderPath = `scripts/extensions/third_party/${extensionName}`;
@@ -271,15 +274,22 @@ jQuery(async () => {
     });
     
     // Register slash command
-    if (typeof SlashCommandParser !== 'undefined') {
+    try {
         SlashCommandParser.addCommandObject(SlashCommand.fromProps({
             name: 'LTM-명령어',
             callback: handleLTMSlashCommand,
             unnamedArgumentList: [
-                new SlashCommandArgument('message', 'The LTM message to process', false, false, '')
+                SlashCommandArgument.fromProps({
+                    description: 'The LTM message to process',
+                    isRequired: false,
+                    defaultValue: ''
+                })
             ],
             helpString: 'Process LTM command and create world info entry.'
         }));
+        console.log("[LTMM] Slash command registered successfully.");
+    } catch (error) {
+        console.warn("[LTMM] Could not register slash command:", error);
     }
     
     console.log("[LTMM] Extension loaded successfully.");
