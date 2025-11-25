@@ -1,1 +1,12 @@
-{"name": "LTMM","version": "1.0.0","description": "LTM Command Manager extension for managing world info in SillyTavern.","main": "main.js","author": "danahhan"}
+{
+    "display_name": "LTM Manager",
+    "loading_order": 1,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "",
+    "author": "danahhan",
+    "version": "1.0.0",
+    "homePage": "https://github.com/danahhan/LTMM",
+    "auto_update": true
+}

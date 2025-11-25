@@ -1,0 +1,349 @@
+<div id="ltmm_settings" class="ltmm-container">
+    <div class="ltmm-header">
+        <h3 class="ltmm-title">
+            <i class="fa-solid fa-brain"></i>
+            LTM Manager
+        </h3>
+        <span class="ltmm-version">v1.0.0</span>
+    </div>
+
+    <!-- Position Setting -->
+    <div class="ltmm-section">
+        <h4 class="ltmm-section-title">
+            <i class="fa-solid fa-sliders"></i>
+            Position Settings
+        </h4>
+        <div class="ltmm-form-group">
+            <label for="ltmm_position_select">World Info Position:</label>
+            <select id="ltmm_position_select" class="text_pole">
+                <option value="0">Before Character (0)</option>
+                <option value="1">After Character (1)</option>
+            </select>
+            <small class="ltmm-help-text">Select where the world info entry will be positioned.</small>
+        </div>
+    </div>
+
+    <!-- LTM Command Input -->
+    <div class="ltmm-section">
+        <h4 class="ltmm-section-title">
+            <i class="fa-solid fa-terminal"></i>
+            LTM Command Processor
+        </h4>
+        <div class="ltmm-form-group">
+            <label for="ltmm_input">LTM Data:</label>
+            <textarea id="ltmm_input" class="text_pole ltmm-textarea" 
+                placeholder="Enter LTM data in format: LTM - $1: $2 |$3|$4|$5|$6&#10;&#10;Example: LTM - Memory: This is content |tag|A|mainkey|100"
+                rows="4"></textarea>
+            <small class="ltmm-help-text">
+                Format: <code>LTM - $1: $2 |$3|$4|$5|$6</code><br>
+                • $1, $3 → KeySecondary<br>
+                • $1 → Comment<br>
+                • $2 → Content<br>
+                • $4 → Constant (A=true, 2=false)<br>
+                • $5 → Key<br>
+                • $6 → Order
+            </small>
+        </div>
+        <button id="ltmm_process_btn" class="menu_button ltmm-btn-primary">
+            <i class="fa-solid fa-play"></i>
+            Process LTM
+        </button>
+    </div>
+
+    <!-- Character Prompts Management -->
+    <div class="ltmm-section">
+        <h4 class="ltmm-section-title">
+            <i class="fa-solid fa-user-pen"></i>
+            Character Prompts
+        </h4>
+        <div class="ltmm-form-group">
+            <label for="ltmm_character_name">Character Name:</label>
+            <input type="text" id="ltmm_character_name" class="text_pole" placeholder="Enter character name">
+        </div>
+        <div class="ltmm-form-group">
+            <label for="ltmm_character_prompt">Prompt:</label>
+            <textarea id="ltmm_character_prompt" class="text_pole ltmm-textarea" 
+                placeholder="Enter character-specific prompt..."
+                rows="4"></textarea>
+        </div>
+        <button id="ltmm_save_prompt" class="menu_button ltmm-btn-success">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Save Prompt
+        </button>
+
+        <!-- Saved Prompts List -->
+        <div class="ltmm-prompts-section">
+            <h5 class="ltmm-subsection-title">Saved Prompts</h5>
+            <div id="ltmm_prompts_list" class="ltmm-prompts-list">
+                <div class="ltmm-empty-state">No character prompts saved yet.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- World Info Quick Add -->
+    <div class="ltmm-section">
+        <h4 class="ltmm-section-title">
+            <i class="fa-solid fa-globe"></i>
+            Quick World Info Entry
+        </h4>
+        <div class="ltmm-quick-form">
+            <div class="ltmm-form-row">
+                <div class="ltmm-form-group ltmm-half">
+                    <label for="ltmm_quick_key">Key:</label>
+                    <input type="text" id="ltmm_quick_key" class="text_pole" placeholder="Primary key">
+                </div>
+                <div class="ltmm-form-group ltmm-half">
+                    <label for="ltmm_quick_keysecondary">Key Secondary:</label>
+                    <input type="text" id="ltmm_quick_keysecondary" class="text_pole" placeholder="Secondary keys (comma separated)">
+                </div>
+            </div>
+            <div class="ltmm-form-group">
+                <label for="ltmm_quick_comment">Comment:</label>
+                <input type="text" id="ltmm_quick_comment" class="text_pole" placeholder="Entry comment">
+            </div>
+            <div class="ltmm-form-group">
+                <label for="ltmm_quick_content">Content:</label>
+                <textarea id="ltmm_quick_content" class="text_pole ltmm-textarea" 
+                    placeholder="World info content..."
+                    rows="3"></textarea>
+            </div>
+            <div class="ltmm-form-row">
+                <div class="ltmm-form-group ltmm-half">
+                    <label for="ltmm_quick_order">Order:</label>
+                    <input type="number" id="ltmm_quick_order" class="text_pole" value="100" min="0">
+                </div>
+                <div class="ltmm-form-group ltmm-half">
+                    <label class="ltmm-checkbox-label">
+                        <input type="checkbox" id="ltmm_quick_constant">
+                        <span>Constant</span>
+                    </label>
+                </div>
+            </div>
+            <button id="ltmm_quick_add" class="menu_button ltmm-btn-primary">
+                <i class="fa-solid fa-plus"></i>
+                Add Entry
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* LTMM Extension Styles */
+.ltmm-container {
+    padding: 10px;
+    background: var(--SmartThemeBlurTintColor);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.ltmm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor);
+}
+
+.ltmm-title {
+    margin: 0;
+    color: var(--SmartThemeBodyColor);
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ltmm-title i {
+    color: var(--SmartThemeQuoteColor);
+}
+
+.ltmm-version {
+    font-size: 0.8em;
+    color: var(--SmartThemeEmColor);
+    background: var(--SmartThemeBlurTintColor);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.ltmm-section {
+    background: var(--SmartThemeBlurTintColor);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--SmartThemeBorderColor);
+}
+
+.ltmm-section-title {
+    margin: 0 0 12px 0;
+    color: var(--SmartThemeBodyColor);
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ltmm-section-title i {
+    color: var(--SmartThemeQuoteColor);
+    width: 16px;
+    text-align: center;
+}
+
+.ltmm-subsection-title {
+    margin: 15px 0 10px 0;
+    color: var(--SmartThemeEmColor);
+    font-size: 0.9em;
+}
+
+.ltmm-form-group {
+    margin-bottom: 10px;
+}
+
+.ltmm-form-group label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--SmartThemeBodyColor);
+    font-size: 0.9em;
+}
+
+.ltmm-form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.ltmm-half {
+    flex: 1;
+}
+
+.ltmm-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.ltmm-help-text {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8em;
+    color: var(--SmartThemeEmColor);
+    line-height: 1.4;
+}
+
+.ltmm-help-text code {
+    background: var(--SmartThemeBlurTintColor);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.ltmm-btn-primary {
+    background: var(--SmartThemeQuoteColor) !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+}
+
+.ltmm-btn-success {
+    background: #28a745 !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+}
+
+.ltmm-prompts-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 4px;
+    background: var(--SmartThemeBlurTintColor);
+}
+
+.ltmm-prompt-item {
+    padding: 10px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor);
+    transition: background-color 0.2s;
+}
+
+.ltmm-prompt-item:last-child {
+    border-bottom: none;
+}
+
+.ltmm-prompt-item:hover {
+    background: var(--SmartThemeBlurTintColor);
+}
+
+.ltmm-prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.ltmm-character-name {
+    font-weight: bold;
+    color: var(--SmartThemeQuoteColor);
+}
+
+.ltmm-prompt-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.ltmm-prompt-actions button {
+    padding: 4px 8px;
+    font-size: 0.8em;
+}
+
+.ltmm-prompt-content {
+    font-size: 0.85em;
+    color: var(--SmartThemeEmColor);
+    word-break: break-word;
+}
+
+.ltmm-empty-state {
+    padding: 20px;
+    text-align: center;
+    color: var(--SmartThemeEmColor);
+    font-style: italic;
+}
+
+.ltmm-checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding-top: 20px;
+}
+
+.ltmm-checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.ltmm-quick-form {
+    background: var(--SmartThemeBlurTintColor);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Scrollbar styling */
+.ltmm-prompts-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ltmm-prompts-list::-webkit-scrollbar-track {
+    background: var(--SmartThemeBlurTintColor);
+}
+
+.ltmm-prompts-list::-webkit-scrollbar-thumb {
+    background: var(--SmartThemeBorderColor);
+    border-radius: 3px;
+}
+
+.ltmm-prompts-list::-webkit-scrollbar-thumb:hover {
+    background: var(--SmartThemeQuoteColor);
+}
+</style>
